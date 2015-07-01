@@ -2,7 +2,7 @@
 
 /*
 PhpWsdl - Generate WSDL from PHP
-Copyright (C) 2011  Andreas Müller-Saala, wan24.de 
+Copyright (C) 2011  Andreas MÃ¼ller-Saala, wan24.de 
 
 This program is free software; you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -49,8 +49,8 @@ PhpWsdl::PostInit();
 /**
  * PhpWsdl class
  * 
- * @author Andreas Müller-Saala
- * @copyright ©2011 Andreas Müller-Saala, wan24.de
+ * @author Andreas MÃ¼ller-Saala
+ * @copyright Â©2011 Andreas MÃ¼ller-Saala, wan24.de
  * @version 2.4
  */
 class PhpWsdl{
@@ -785,7 +785,16 @@ class PhpWsdl{
 	 * Determine the namespace
 	 */
 	public function DetermineNameSpace(){
-		return 'http://'.$_SERVER['SERVER_NAME'].str_replace(basename($_SERVER['SCRIPT_NAME']),'',$_SERVER['SCRIPT_NAME']);
+		$isSecure = false;
+		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+			$isSecure = true;
+		}
+		elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+			$isSecure = true;
+		}
+		$requestProtocol = $isSecure ? 'https' : 'http';
+	
+		return $requestProtocol.'://'.$_SERVER['SERVER_NAME'].str_replace(basename($_SERVER['SCRIPT_NAME']),'',$_SERVER['SCRIPT_NAME']);
 	}
 	
 	/**
